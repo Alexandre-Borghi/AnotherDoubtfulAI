@@ -4,6 +4,19 @@ class MatrixError(Exception):
     pass
 
 
+class MatrixAdditionError(MatrixError):
+    """An exception for matrix additions."""
+
+    def __init__(self, m1, m2):
+        self.m1 = m1.m
+        self.n1 = m1.n
+        self.m2 = m2.m
+        self.n2 = m2.n
+
+    def __str__(self):
+        return f"Cannot add {self.m1}x{self.n1} matrix with {self.m2}x{self.n2} matrix."
+
+
 class Matrix:
     """This class represents a matrix of arbitrary size.
     
@@ -35,6 +48,26 @@ class Matrix:
         self.rows = rows
         self.m = len(self.rows)
         self.n = len(self.rows[0])
+
+    def __add__(self, other):
+        """Adds a matrix to this matrix without modifying the current matrix.
+
+        Arguments:
+            other (Matrix): The matrix to add self with.
+        
+        Returns:
+            The sum of the two matrices.
+        
+        Errors:
+            Raises a MatrixAdditionException if adding different-sized matrices.
+        """
+
+        pass
+
+    def get_rank(self):
+        """Returns the matrix rank tuple (m, n)."""
+
+        return (self.m, self.n)
 
     @classmethod
     def identity(cls, rank=1):

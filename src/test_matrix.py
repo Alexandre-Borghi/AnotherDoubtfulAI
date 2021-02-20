@@ -61,6 +61,27 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(mat.m, 3)
         self.assertEqual(mat.n, 2)
 
+    def test_add(self):
+        mat1 = matrix.Matrix([[1, 1], [1, 1]])
+        mat2 = matrix.Matrix([[2, 2], [2, 2]])
+
+        mat = mat1 + mat2
+
+        self.assertEqual(mat.data, [[3, 3], [3, 3]])
+
+    def test_get_rank(self):
+        mat = matrix.Matrix()
+
+        self.assertEqual(mat.get_rank(), (1, 1))
+
+        mat = matrix.Matrix([[0, 0], [0, 0]])
+
+        self.assertEqual(mat.get_rank(), (2, 2))
+
+        mat = matrix.Matrix([[0], [0], [0]])
+
+        self.assertEqual(mat.get_rank(), (3, 1))
+
 
 if __name__ == "__main__":
     unittest.main()
