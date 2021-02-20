@@ -60,7 +60,21 @@ class TestMatrix(unittest.TestCase):
 
         mat = mat1 + mat2
 
-        self.assertEqual(mat.data, [[3, 3], [3, 3]])
+        self.assertEqual(mat.rows, [[3, 3], [3, 3]])
+
+        mat1 = matrix.Matrix([[1], [1]])
+        mat2 = matrix.Matrix([[2], [2]])
+
+        mat = mat1 + mat2
+
+        self.assertEqual(mat.rows, [[3], [3]])
+
+    @unittest.expectedFailure
+    def test_add_with_different_rank_matrices(self):
+        mat1 = matrix.Matrix([[1], [1]])
+        mat2 = matrix.Matrix([[2, 2], [2, 2]])
+
+        _ = mat1 + mat2
 
     def test_get_rank(self):
         mat = matrix.Matrix()
@@ -82,6 +96,19 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(mat[1, 0], 0)
         self.assertEqual(mat[0, 1], 0)
         self.assertEqual(mat[1, 1], 1)
+
+    @unittest.expectedFailure
+    def test_getitem_out_of_range(self):
+        mat = matrix.Matrix.identity(3)
+
+        _ = mat[3, 1]
+        _ = mat[-1, 2]
+
+    def test_setitem(self):
+        mat = matrix.Matrix.identity(3)
+        mat[1, 1] = 3
+
+        self.assertEqual(mat[1, 1], 3)
 
 
 if __name__ == "__main__":

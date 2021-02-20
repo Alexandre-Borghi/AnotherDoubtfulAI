@@ -14,17 +14,30 @@ class MatrixAdditionError(MatrixError):
         self.n2 = m2.n
 
     def __str__(self):
-        return f"Cannot add {self.m1}x{self.n1} matrix with {self.m2}x{self.n2} matrix."
+        return f"Can't add {self.m1}x{self.n1} matrix with {self.m2}x{self.n2} matrix."
+
+
+class MatrixIndexOutOfRangeError(MatrixError):
+    """An exception for index out of range matrix errors."""
+
+    def __init__(self, mat, index):
+        self.m = mat.m
+        self.n = mat.n
+        self.index = index
+
+    def __str__(self):
+        return f"No {self.index[0]}, {self.index[1]} entry in {self.m}x{self.n} matrix."
 
 
 class Matrix:
     """This class represents a matrix of arbitrary size.
+
+    Note that this matrix is zero-indexed. The first entry of the 'mat' matrix
+    is mat[0, 0].
     
     Class methods:
         identity: Creates an identity matrix of given rank.
         zeros: Creates a matrix of given rank filled with zeros.
-    
-    Methods:
     """
 
     def __init__(self, rows=[[0]]):
@@ -53,16 +66,41 @@ class Matrix:
         """Returns the entry 'entry' of the matrix. Note that i and j start at 0.
 
         Usage:
-            mat[i, j]
+            e = mat[i, j]
 
         Arguments:
             entry (tuple): The (i, j) tuple of the entry to return.
         
         Returns:
             The entry at (i, j)
+
+        Errors:
+            Raises a MatrixIndexOutOfRangeError if trying to index outside of matrix.
         """
 
+        if not (0 <= entry[0] < self.m) or not (0 <= entry[1] < self.n):
+            raise MatrixIndexOutOfRangeError(self, entry)
+
         return self.rows[entry[0]][entry[1]]
+
+    def __setitem__(self, entry, value):
+        """Modifies the 'entry' value. Note that i and j start at 0.
+
+        Usage:
+            mat[i, j] = val
+
+        Arguments:
+            entry (tuple): The (i, j) tuple of the entry to modify.
+            value (number): The new value for the entry.
+        
+        Error:
+            Raises a MatrixIndexOutOfRangeError if trying to index outside of matrix.
+        """
+
+        if not (0 <= entry[0] < self.m) or not (0 <= entry[1] < self.n):
+            raise MatrixIndexOutOfRangeError(self, entry)
+
+        self.rows[entry[0]][entry[1]] = value
 
     def __add__(self, other):
         """Adds a matrix to this matrix without modifying the current matrix.
@@ -79,6 +117,14 @@ class Matrix:
 
         if self.get_rank() != other.get_rank():
             raise MatrixAdditionError(self, other)
+
+        mat = Matrix.zeros(self.get_rank())
+
+        for i in range(self.m):
+            for j in range(self.n):
+                mat[i, j] = self[i, j] + other[i, j]
+
+        return mat
 
     def get_rank(self):
         """Returns the matrix rank tuple (m, n)."""
