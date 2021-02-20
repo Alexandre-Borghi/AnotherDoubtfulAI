@@ -76,6 +76,28 @@ class TestMatrix(unittest.TestCase):
 
         _ = mat1 + mat2
 
+    def test_iadd(self):
+        mat1 = matrix.Matrix([[1, 1], [1, 1]])
+        mat2 = matrix.Matrix([[2, 2], [2, 2]])
+
+        mat1 += mat2
+
+        self.assertEqual(mat1.rows, [[3, 3], [3, 3]])
+
+        mat1 = matrix.Matrix([[1], [1]])
+        mat2 = matrix.Matrix([[2], [2]])
+
+        mat1 += mat2
+
+        self.assertEqual(mat1.rows, [[3], [3]])
+
+    @unittest.expectedFailure
+    def test_iadd_with_different_rank_matrices(self):
+        mat1 = matrix.Matrix([[1], [1]])
+        mat2 = matrix.Matrix([[2, 2], [2, 2]])
+
+        mat1 += mat2
+
     def test_get_rank(self):
         mat = matrix.Matrix()
 

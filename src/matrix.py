@@ -38,6 +38,9 @@ class Matrix:
     Class methods:
         identity: Creates an identity matrix of given rank.
         zeros: Creates a matrix of given rank filled with zeros.
+    
+    Methods:
+        get_rank: Returns the (m, n) rank tuple of the matrix.
     """
 
     def __init__(self, rows=[[0]]):
@@ -126,6 +129,28 @@ class Matrix:
 
         return mat
 
+    def __iadd__(self, other):
+        """Adds a matrix to this matrix and modifies the current matrix.
+
+        Arguments:
+            other (Matrix): The matrix to add self with.
+        
+        Returns:
+            self, modified.
+        
+        Errors:
+            Raises a MatrixAdditionException if adding different-sized matrices.
+        """
+
+        if self.get_rank() != other.get_rank():
+            raise MatrixAdditionError(self, other)
+
+        for i in range(self.m):
+            for j in range(self.n):
+                self[i, j] += other[i, j]
+
+        return self
+
     def get_rank(self):
         """Returns the matrix rank tuple (m, n)."""
 
@@ -145,6 +170,7 @@ class Matrix:
         Errors:
             Raises an MatrixError if rank is 0 or less.
         """
+
         if rank < 1:
             raise MatrixError("Matrix rank must be at least 1")
 
