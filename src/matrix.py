@@ -49,6 +49,21 @@ class Matrix:
         self.m = len(self.rows)
         self.n = len(self.rows[0])
 
+    def __getitem__(self, entry):
+        """Returns the entry 'entry' of the matrix. Note that i and j start at 0.
+
+        Usage:
+            mat[i, j]
+
+        Arguments:
+            entry (tuple): The (i, j) tuple of the entry to return.
+        
+        Returns:
+            The entry at (i, j)
+        """
+
+        return self.rows[entry[0]][entry[1]]
+
     def __add__(self, other):
         """Adds a matrix to this matrix without modifying the current matrix.
 
@@ -62,7 +77,8 @@ class Matrix:
             Raises a MatrixAdditionException if adding different-sized matrices.
         """
 
-        pass
+        if self.get_rank() != other.get_rank():
+            raise MatrixAdditionError(self, other)
 
     def get_rank(self):
         """Returns the matrix rank tuple (m, n)."""

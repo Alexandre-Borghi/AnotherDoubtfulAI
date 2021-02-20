@@ -6,8 +6,7 @@ class TestMatrix(unittest.TestCase):
     def test_init_default_value(self):
         mat = matrix.Matrix()
         self.assertEqual(mat.rows, [[0]], "empty matrix should contain a 0")
-        self.assertEqual(mat.m, 1)
-        self.assertEqual(mat.n, 1)
+        self.assertEqual(mat.get_rank(), (1, 1))
 
     def test_init_with_rows(self):
         _ = matrix.Matrix([[0, 1, 2], [5, 7, -3], [-10, 8, 1]])
@@ -21,15 +20,13 @@ class TestMatrix(unittest.TestCase):
         mat = matrix.Matrix.identity()
 
         self.assertEqual(mat.rows, [[1]])
-        self.assertEqual(mat.m, 1)
-        self.assertEqual(mat.n, 1)
+        self.assertEqual(mat.get_rank(), (1, 1))
 
     def test_identity(self):
         mat = matrix.Matrix.identity(2)
 
         self.assertEqual(mat.rows, [[1, 0], [0, 1]])
-        self.assertEqual(mat.m, 2)
-        self.assertEqual(mat.n, 2)
+        self.assertEqual(mat.get_rank(), (2, 2))
 
     @unittest.expectedFailure
     def test_identity_with_negative_dimension(self):
@@ -39,27 +36,23 @@ class TestMatrix(unittest.TestCase):
         mat = matrix.Matrix.zeros()
 
         self.assertEqual(mat.rows, [[0]])
-        self.assertEqual(mat.m, 1)
-        self.assertEqual(mat.n, 1)
+        self.assertEqual(mat.get_rank(), (1, 1))
 
     def test_zeros(self):
         mat = matrix.Matrix.zeros((2, 1))
 
         self.assertEqual(mat.rows, [[0], [0]])
-        self.assertEqual(mat.m, 2)
-        self.assertEqual(mat.n, 1)
+        self.assertEqual(mat.get_rank(), (2, 1))
 
         mat = matrix.Matrix.zeros((1, 2))
 
         self.assertEqual(mat.rows, [[0, 0]])
-        self.assertEqual(mat.m, 1)
-        self.assertEqual(mat.n, 2)
+        self.assertEqual(mat.get_rank(), (1, 2))
 
         mat = matrix.Matrix.zeros((3, 2))
 
         self.assertEqual(mat.rows, [[0, 0], [0, 0], [0, 0]])
-        self.assertEqual(mat.m, 3)
-        self.assertEqual(mat.n, 2)
+        self.assertEqual(mat.get_rank(), (3, 2))
 
     def test_add(self):
         mat1 = matrix.Matrix([[1, 1], [1, 1]])
@@ -81,6 +74,14 @@ class TestMatrix(unittest.TestCase):
         mat = matrix.Matrix([[0], [0], [0]])
 
         self.assertEqual(mat.get_rank(), (3, 1))
+
+    def test_getitem(self):
+        mat = matrix.Matrix.identity(3)
+
+        self.assertEqual(mat[0, 0], 1)
+        self.assertEqual(mat[1, 0], 0)
+        self.assertEqual(mat[0, 1], 0)
+        self.assertEqual(mat[1, 1], 1)
 
 
 if __name__ == "__main__":
