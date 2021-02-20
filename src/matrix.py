@@ -44,6 +44,9 @@ class Matrix:
             rank (number): The rank of the (square) matrix to create.
                 Default value is 1.
         
+        Returns:
+            Identity matrix of rank 'rank'.
+        
         Errors:
             Raises an MatrixError if rank is 0 or less.
         """
@@ -66,7 +69,13 @@ class Matrix:
 
         Returns:
             A matrix of given rank filled with zeros.
+        
+        Errors:
+            Raise a MatrixError if rank is invalid
         """
+
+        if rank[0] < 1 or rank[1] < 1:
+            raise MatrixError("Rank must be 1 or more")
 
         rows = [[0 for _ in range(rank[1])] for _ in range(rank[0])]
 
