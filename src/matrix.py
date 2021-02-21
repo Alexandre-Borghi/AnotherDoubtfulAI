@@ -255,6 +255,28 @@ class Matrix:
 
         return res
 
+    def get_transpose(self):
+        """Returns the transposed matrix without modifying the current matrix.
+        """
+
+        res = Matrix.zeros((self.n, self.m))
+
+        for i in range(res.m):
+            for j in range(res.n):
+                res[i, j] = self[j, i]
+
+        return res
+
+    def transpose(self):
+        """Returns the transposed matrix and modifies the current matrix."""
+
+        res = self.get_transpose()
+        self.rows = res.rows
+        self.m = res.m
+        self.n = res.n
+
+        return self
+
     def get_rank(self):
         """Returns the matrix rank tuple (m, n)."""
 

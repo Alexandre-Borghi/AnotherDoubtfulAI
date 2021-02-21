@@ -12,9 +12,9 @@ class TestMatrix(unittest.TestCase):
         _ = matrix.Matrix([[0, 1, 2], [5, 7, -3], [-10, 8, 1]])
         _ = matrix.Matrix([[0.3, 2.1, 1.2], [7.5, 7, -3.25], [-11.54, 7, 45]])
 
-    @unittest.expectedFailure
     def test_init_with_different_sized_columns(self):
-        _ = matrix.Matrix([[0, 2], [1], [8, 5, 6]])
+        with self.assertRaises(matrix.MatrixError):
+            _ = matrix.Matrix([[0, 2], [1], [8, 5, 6]])
 
     def test_identity_default(self):
         mat = matrix.Matrix.identity()
@@ -28,9 +28,9 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(mat.rows, [[1, 0], [0, 1]])
         self.assertEqual(mat.get_rank(), (2, 2))
 
-    @unittest.expectedFailure
     def test_identity_with_negative_rank(self):
-        _ = matrix.Matrix.identity(-2)
+        with self.assertRaises(matrix.MatrixError):
+            _ = matrix.Matrix.identity(-2)
 
     def test_zeros_default(self):
         mat = matrix.Matrix.zeros()
@@ -69,12 +69,12 @@ class TestMatrix(unittest.TestCase):
 
         self.assertEqual(mat.rows, [[3], [3]])
 
-    @unittest.expectedFailure
     def test_add_with_different_rank_matrices(self):
         mat1 = matrix.Matrix([[1], [1]])
         mat2 = matrix.Matrix([[2, 2], [2, 2]])
 
-        _ = mat1 + mat2
+        with self.assertRaises(matrix.MatrixAdditionError):
+            _ = mat1 + mat2
 
     def test_iadd(self):
         mat1 = matrix.Matrix([[1, 1], [1, 1]])
@@ -91,12 +91,12 @@ class TestMatrix(unittest.TestCase):
 
         self.assertEqual(mat1.rows, [[3], [3]])
 
-    @unittest.expectedFailure
     def test_iadd_with_different_rank_matrices(self):
         mat1 = matrix.Matrix([[1], [1]])
         mat2 = matrix.Matrix([[2, 2], [2, 2]])
 
-        mat1 += mat2
+        with self.assertRaises(matrix.MatrixAdditionError):
+            mat1 += mat2
 
     def test_mul(self):
         mat1 = matrix.Matrix([[2, 3], [8, 1]])
@@ -140,6 +140,30 @@ class TestMatrix(unittest.TestCase):
 
         self.assertEqual(res, mat1)
 
+    def test_get_transpose(self):
+        mat = matrix.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        res = matrix.Matrix([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
+
+        self.assertEqual(res, mat.get_transpose())
+
+        mat = matrix.Matrix([[1, 4, 3], [8, 2, 6], [7, 8, 3], [4, 9, 6], [7, 8, 1]])
+        res = matrix.Matrix([[1, 8, 7, 4, 7], [4, 2, 8, 9, 8], [3, 6, 3, 6, 1]])
+
+        self.assertEqual(res, mat.get_transpose())
+
+    def test_transpose(self):
+        mat = matrix.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        res = matrix.Matrix([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
+        mat.transpose()
+
+        self.assertEqual(res, mat)
+
+        mat = matrix.Matrix([[1, 4, 3], [8, 2, 6], [7, 8, 3], [4, 9, 6], [7, 8, 1]])
+        res = matrix.Matrix([[1, 8, 7, 4, 7], [4, 2, 8, 9, 8], [3, 6, 3, 6, 1]])
+        mat.transpose()
+
+        self.assertEqual(res, mat)
+
     def test_get_rank(self):
         mat = matrix.Matrix()
 
@@ -161,12 +185,14 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(mat[0, 1], 0)
         self.assertEqual(mat[1, 1], 1)
 
-    @unittest.expectedFailure
     def test_getitem_out_of_range(self):
         mat = matrix.Matrix.identity(3)
 
-        _ = mat[3, 1]
-        _ = mat[-1, 2]
+        with self.assertRaises(matrix.MatrixIndexOutOfRangeError):
+            _ = mat[3, 1]
+
+        with self.assertRaises(matrix.MatrixIndexOutOfRangeError):
+            _ = mat[-1, 2]
 
     def test_setitem(self):
         mat = matrix.Matrix.identity(3)
