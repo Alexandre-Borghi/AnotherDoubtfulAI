@@ -1,3 +1,6 @@
+from utils import is_a_number
+
+
 class MatrixError(Exception):
     """An exception for the Matrix class"""
 
@@ -15,6 +18,19 @@ class MatrixAdditionError(MatrixError):
 
     def __str__(self):
         return f"Can't add {self.m1}x{self.n1} matrix with {self.m2}x{self.n2} matrix."
+
+
+class MatrixMultiplicationError(MatrixError):
+    def __init__(self, m1, m2):
+        self.m1 = m1.m
+        self.n1 = m1.n
+        self.m2 = m2.m
+        self.n2 = m2.n
+
+    def __str__(self):
+        return (
+            f"Can't mutiply {self.m1}x{self.n1} matrix with {self.m2}x{self.n2} matrix."
+        )
 
 
 class MatrixIndexOutOfRangeError(MatrixError):
@@ -105,6 +121,19 @@ class Matrix:
 
         self.rows[entry[0]][entry[1]] = value
 
+    def __eq__(self, other):
+        """Checks if 2 matrices are equal."""
+
+        if self.get_rank() != other.get_rank():
+            return False
+
+        return self.rows == other.rows
+
+    def __ne__(self, other):
+        """Checks if 2 matrices are different"""
+
+        return not self.__eq__(other)
+
     def __add__(self, other):
         """Adds a matrix to this matrix without modifying the current matrix.
 
@@ -151,10 +180,90 @@ class Matrix:
 
         return self
 
+    def __mul__(self, other):
+        """Multiplication of this matrix. Doesn't modify the current matrix.
+        Can be element-wise or matrix multiplication depending on the type of
+        other.
+
+        Arguments:
+            other (number or Matrix): The number/matrix to multiply the matrix by.
+        
+        Returns:
+            The matrix multiplied by other.
+        
+        Notice:
+            Returns NotImplemented if the 'other' argument is not a number nor
+            a Matrix.
+        """
+
+        if type(other) is Matrix:
+            return self.__matmul__(other)
+
+        if not is_a_number(other):
+            return NotImplemented
+
+        res = Matrix.zeros(self.get_rank())
+
+        for i in range(self.m):
+            for j in range(self.n):
+                res[i, j] = self[i, j] * other
+
+        return res
+
+    def __rmul__(self, scalar):
+        """Element-wise multiplication of this matrix. Doesn't modify the
+        current matrix.
+
+        Arguments:
+            scalar (number): The number to multiply the matrix by.
+        
+        Returns:
+            The matrix multiplied by scalar.
+        
+        Notice:
+            Returns NotImplemented if the 'scalar' argument is not a number.
+        """
+
+        return self.__mul__(scalar)
+
+    def __matmul__(self, other):
+        """Returns the matrix multiplied by 'other'. Doesn't modify the current
+        matrix.
+
+        Arguments:
+            other (Matrix): The matrix to multiply this matrix by.
+        
+        Returns:
+            The multiplication of the 2 matrices.
+
+        Notice:
+            Returns NotImplemented if other is not a Matrix.
+        """
+
+        if type(other) is not Matrix:
+            return NotImplemented
+
+        if self.n != other.m:
+            raise MatrixMultiplicationError(self, other)
+
+        res = Matrix.zeros((self.m, other.n))
+
+        for i in range(res.m):
+            for j in range(res.n):
+                for k in range(self.n):
+                    res[i, j] += self[i, k] * other[k, j]
+
+        return res
+
     def get_rank(self):
         """Returns the matrix rank tuple (m, n)."""
 
         return (self.m, self.n)
+
+    def copy(self):
+        """Returns a copy of the current matrix."""
+
+        return Matrix(self.rows)
 
     @classmethod
     def identity(cls, rank=1):
