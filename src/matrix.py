@@ -1,4 +1,5 @@
 from utils import is_a_number
+from random import uniform
 
 
 class MatrixError(Exception):
@@ -339,12 +340,36 @@ class Matrix:
             A matrix of given rank filled with zeros.
         
         Errors:
-            Raise a MatrixError if rank is invalid
+            Raise a MatrixError if rank is invalid.
         """
 
         if rank[0] < 1 or rank[1] < 1:
             raise MatrixError("Rank must be 1 or more")
 
         rows = [[0 for _ in range(rank[1])] for _ in range(rank[0])]
+
+        return Matrix(rows)
+    
+    @classmethod
+    def random(cls, rank=(1, 1), min_=0.0, max_=1.0):
+        """Returns a random matrix of given rank.
+
+        Arguments:
+            rank (tuple): The rank (m, n) of the matrix to create.
+            min (number): The minimum value of the random numbers.
+            max (number): The maximum value of the random numbers.
+            
+
+        Returns:
+            A matrix of given rank filled with random numbers.
+        
+        Errors:
+            Raise a MatrixError if rank is invalid.
+        """
+
+        if rank[0] < 1 or rank[1] < 1:
+            raise MatrixError("Rank must be 1 or more")
+
+        rows = [[uniform(min_, max_) for _ in range(rank[1])] for _ in range(rank[0])]
 
         return Matrix(rows)
