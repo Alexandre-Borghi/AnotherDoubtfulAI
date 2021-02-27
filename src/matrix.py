@@ -55,9 +55,14 @@ class Matrix:
     Class methods:
         identity: Creates an identity matrix of given rank.
         zeros: Creates a matrix of given rank filled with zeros.
+        random: Creates a random matrix.
     
     Methods:
+        get_transpose: Returns the transposed matrix.
+        transpose: Transposes the current matrix.
         get_rank: Returns the (m, n) rank tuple of the matrix.
+        copy: Returns a copy of the matrix.
+        map: Maps the matrix to a function.
     """
 
     def __init__(self, rows=[[0]]):
