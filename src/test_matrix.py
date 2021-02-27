@@ -205,6 +205,18 @@ class TestMatrix(unittest.TestCase):
         mat2 = mat1.copy()
 
         self.assertEqual(mat1, mat2)
+    
+    def test_map(self):
+        mat = matrix.Matrix([[1, 2], [3, 4]])
+
+        def triple(n):
+            return 3 * n
+        
+        mat.map(triple)
+
+        res = matrix.Matrix([[3, 6], [9, 12]])
+
+        self.assertEqual(mat, res)
 
 
 if __name__ == "__main__":

@@ -287,6 +287,22 @@ class Matrix:
 
         return Matrix(self.rows)
 
+    def map(self, function):
+        """Maps each element of the matrix through the given function. Modifies
+        the current matrix.
+
+        Arguments:
+            function (Function): The function to map the matrix to.
+
+        Returns:
+            The modified matrix (self).
+        """
+        for i in range(self.n):
+            for j in range(self.m):
+                self[i, j] = function(self[i, j])
+            
+        return self
+
     @classmethod
     def identity(cls, rank=1):
         """Returns the identity matrix of rank 'rank'.
