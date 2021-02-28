@@ -1,9 +1,8 @@
-from layer import Layer
+from nn import NeuralNetwork
 
-# XOR example
+# AND example
 
-inputs = Layer(2)
-output = Layer(1, inputs)
+nn = NeuralNetwork([2, 3, 1])
 
 data = [
     [0, 0],
@@ -12,7 +11,11 @@ data = [
     [1, 1],
 ]
 
-inputs.load_data(data[0])
-output.compute()
+targets = [
+    [0],
+    [0],
+    [0],
+    [1],
+]
 
-print(output.activations.rows)
+print(nn.feedforward(data[0]).activations.rows)

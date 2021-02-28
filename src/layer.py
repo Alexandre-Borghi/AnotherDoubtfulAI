@@ -32,6 +32,17 @@ class Layer:
 
         return self.prev_layer is None
 
+    def load_data(self, data):
+        """Loads data from an array that should have the same number of elements
+        than the number of neurons in the layer. Use this function to put data in
+        in the input layer.
+
+        Arguments:
+            data (array): Array of numbers to put in the activations matrix.
+        """
+
+        self.activations = Matrix([[data[i]] for i in range(len(data))])
+
     def compute(self):
         """Computes the new values from the previous layer and returns self.
         Does nothing if layer is an input layer.
@@ -46,14 +57,3 @@ class Layer:
         ).map(self.activation_func)
 
         return self
-
-    def load_data(self, data):
-        """Loads data from an array that should have the same number of elements
-        than the number of neurons in the layer. Use this function to put data in
-        in the input layer.
-
-        Arguments:
-            data (array): Array of numbers to put in the activations matrix.
-        """
-
-        self.activations = Matrix([[data[i]] for i in range(len(data))])
