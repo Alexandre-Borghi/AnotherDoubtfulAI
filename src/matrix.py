@@ -303,10 +303,10 @@ class Matrix:
         Returns:
             The modified matrix (self).
         """
-        for i in range(self.n):
-            for j in range(self.m):
+        for i in range(self.m):
+            for j in range(self.n):
                 self[i, j] = function(self[i, j])
-            
+
         return self
 
     @classmethod
@@ -354,7 +354,7 @@ class Matrix:
         rows = [[0 for _ in range(rank[1])] for _ in range(rank[0])]
 
         return Matrix(rows)
-    
+
     @classmethod
     def random(cls, rank=(1, 1), min_=0.0, max_=1.0):
         """Returns a random matrix of given rank.
