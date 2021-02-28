@@ -98,6 +98,36 @@ class TestMatrix(unittest.TestCase):
         with self.assertRaises(matrix.MatrixAdditionError):
             mat1 += mat2
 
+    def test_sub(self):
+        mat1 = matrix.Matrix([[1, 1], [1, 1]])
+        mat2 = matrix.Matrix([[2, 2], [2, 2]])
+
+        mat = mat1 - mat2
+
+        self.assertEqual(mat.rows, [[-1, -1], [-1, -1]])
+
+        mat1 = matrix.Matrix([[1], [1]])
+        mat2 = matrix.Matrix([[2], [2]])
+
+        mat = mat1 - mat2
+
+        self.assertEqual(mat.rows, [[-1], [-1]])
+
+    def test_isub(self):
+        mat1 = matrix.Matrix([[1, 1], [1, 1]])
+        mat2 = matrix.Matrix([[2, 2], [2, 2]])
+
+        mat1 -= mat2
+
+        self.assertEqual(mat1.rows, [[-1, -1], [-1, -1]])
+
+        mat1 = matrix.Matrix([[1], [1]])
+        mat2 = matrix.Matrix([[2], [2]])
+
+        mat1 -= mat2
+
+        self.assertEqual(mat1.rows, [[-1], [-1]])
+
     def test_mul(self):
         mat1 = matrix.Matrix([[2, 3], [8, 1]])
         mat2 = mat1 * 2
@@ -205,13 +235,13 @@ class TestMatrix(unittest.TestCase):
         mat2 = mat1.copy()
 
         self.assertEqual(mat1, mat2)
-    
+
     def test_map(self):
         mat = matrix.Matrix([[1, 2], [3, 4]])
 
         def triple(n):
             return 3 * n
-        
+
         mat.map(triple)
 
         res = matrix.Matrix([[3, 6], [9, 12]])

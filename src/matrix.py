@@ -21,6 +21,19 @@ class MatrixAdditionError(MatrixError):
         return f"Can't add {self.m1}x{self.n1} matrix with {self.m2}x{self.n2} matrix."
 
 
+class MatrixSubtractionError(MatrixError):
+    """An exception for matrix subtractions."""
+
+    def __init__(self, m1, m2):
+        self.m1 = m1.m
+        self.n1 = m1.n
+        self.m2 = m2.m
+        self.n2 = m2.n
+
+    def __str__(self):
+        return f"Can't subtract {self.m2}x{self.n2} matrix from {self.m1}x{self.n1} matrix."
+
+
 class MatrixMultiplicationError(MatrixError):
     def __init__(self, m1, m2):
         self.m1 = m1.m
@@ -150,7 +163,7 @@ class Matrix:
             The sum of the two matrices.
         
         Errors:
-            Raises a MatrixAdditionException if adding different-sized matrices.
+            Raises a MatrixAdditionError if adding different-sized matrices.
         """
 
         if self.get_rank() != other.get_rank():
@@ -174,7 +187,7 @@ class Matrix:
             self, modified.
         
         Errors:
-            Raises a MatrixAdditionException if adding different-sized matrices.
+            Raises a MatrixAdditionError if adding different-sized matrices.
         """
 
         if self.get_rank() != other.get_rank():
@@ -183,6 +196,52 @@ class Matrix:
         for i in range(self.m):
             for j in range(self.n):
                 self[i, j] += other[i, j]
+
+        return self
+
+    def __sub__(self, other):
+        """Subtracts a matrix from this matrix without modifying the current matrix.
+
+        Arguments:
+            other (Matrix): The matrix to subtract from self.
+        
+        Returns:
+            The difference of the two matrices.
+        
+        Errors:
+            Raises a MatrixSubtractionError if subtracting different-sized matrices.
+        """
+
+        if self.get_rank() != other.get_rank():
+            raise MatrixSubtractionError(self, other)
+
+        mat = Matrix.zeros(self.get_rank())
+
+        for i in range(self.m):
+            for j in range(self.n):
+                mat[i, j] = self[i, j] - other[i, j]
+
+        return mat
+
+    def __isub__(self, other):
+        """Subtracts a matrix to this matrix and modifies the current matrix.
+
+        Arguments:
+            other (Matrix): The matrix to subtract from self.
+        
+        Returns:
+            self, modified.
+        
+        Errors:
+            Raises a MatrixSubtractionError if subtracting different-sized matrices.
+        """
+
+        if self.get_rank() != other.get_rank():
+            raise MatrixSubtractionError(self, other)
+
+        for i in range(self.m):
+            for j in range(self.n):
+                self[i, j] -= other[i, j]
 
         return self
 
