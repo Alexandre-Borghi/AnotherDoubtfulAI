@@ -170,6 +170,14 @@ class TestMatrix(unittest.TestCase):
 
         self.assertEqual(res, mat1)
 
+    def test_el_wise_mul(self):
+        mat1 = matrix.Matrix([[2, 3], [8, 1]])
+        mat2 = matrix.Matrix([[5, 1], [6, 7]])
+        mat = mat1.el_wise_mul(mat2)
+        res = matrix.Matrix([[10, 3], [48, 7]])
+
+        self.assertEqual(res, mat)
+
     def test_get_transpose(self):
         mat = matrix.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         res = matrix.Matrix([[1, 4, 7], [2, 5, 8], [3, 6, 9]])

@@ -320,6 +320,32 @@ class Matrix:
 
         return res
 
+    def el_wise_mul(self, other):
+        """Returns the element-wise product (Hadamard product) of the 2 matrices.
+        Doesn't modify the current matrix.
+
+        Arguments:
+            other (Matrix): The matrix to multiply this matrix by.
+        
+        Returns:
+            The element-wise product of the 2 matrices.
+        
+        Errors:
+            Raises a MatrixMultiplicationError if trying to multiply 2 matrices
+            of different sizes.
+        """
+
+        if self.get_rank() != other.get_rank():
+            raise MatrixMultiplicationError(self, other)
+
+        mat = Matrix.zeros(self.get_rank())
+
+        for i in range(self.m):
+            for j in range(self.n):
+                mat[i, j] = self[i, j] * other[i, j]
+
+        return mat
+
     def get_transpose(self):
         """Returns the transposed matrix without modifying the current matrix.
         """
