@@ -43,17 +43,23 @@ class Layer:
 
         self.activations = Matrix([[data[i]] for i in range(len(data))])
 
-    def compute(self):
-        """Computes the new values from the previous layer and returns self.
-        Does nothing if layer is an input layer.
+    def compute(self, modify=True):
+        """Computes the new values from the previous layer and returns the new
+        values of the neurons. Does nothing if layer is an input layer.
+
+        Arguments:
+            modify (boolean): Set to False if the activations of the layer should
+            not be modified. Useful during backpropagation.
         """
 
         if self.is_input_layer():
-            return self
+            return self.activations
 
-        self.activations = (
-            self.weights.get_transpose() * self.prev_layer.compute().activations
-            + self.biases
+        new_activations = (
+            self.weights.get_transpose() * self.prev_layer.compute(modify) + self.biases
         ).map(self.activation_func)
 
-        return self
+        if modify:
+            self.activations = new_activations
+
+        return new_activations
