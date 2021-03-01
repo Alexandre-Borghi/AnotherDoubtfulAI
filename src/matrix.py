@@ -441,7 +441,7 @@ class Matrix:
         return Matrix(rows)
 
     @classmethod
-    def random(cls, rank=(1, 1), min_=0.0, max_=1.0):
+    def random(cls, rank=(1, 1), min_=-1.0, max_=1.0):
         """Returns a random matrix of given rank.
 
         Arguments:

@@ -1,11 +1,17 @@
 from matrix import Matrix
-from utils import sigmoid
+from utils import leaky_relu, leaky_relu_prime
 
 
 class Layer:
     """Represents a neural network's hidden layer."""
 
-    def __init__(self, neurons, prev_layer=None, activation_func=sigmoid):
+    def __init__(
+        self,
+        neurons,
+        prev_layer=None,
+        activation_func=leaky_relu,
+        activation_func_deriv=leaky_relu_prime,
+    ):
         """Creates a neural network layer.
         
         Arguments:
@@ -21,6 +27,7 @@ class Layer:
             self.weights = Matrix.random((self.prev_layer.get_neurons_count(), neurons))
             self.biases = Matrix.random((neurons, 1))
             self.activation_func = activation_func
+            self.activation_func_deriv = activation_func_deriv
 
     def get_neurons_count(self):
         """Returns the number of neurons in the layer."""
@@ -63,3 +70,34 @@ class Layer:
             self.activations = new_activations
 
         return new_activations
+
+    def backpropagate(self, error, learning_rate=0.1):
+        """Changes the weights and biases of this layer and backpropagates to
+        previous layer.
+        Should only be used externally on the last layer of the neural network.
+
+        Arguments:
+            error (Matrix): Column matrix of the difference between the results
+            (activations) of this layer and the expected results.
+        """
+
+        # Resource used for the equations : https://sudeepraja.github.io/Neural/
+
+        if self.is_input_layer():
+            return
+
+        activations_deriv = (
+            (self.weights.get_transpose() * self.prev_layer.activations)
+            .copy()
+            .map(self.activation_func_deriv)
+        )
+        d = error.el_wise_mul(activations_deriv) * learning_rate
+        delta_weights = d * self.prev_layer.activations.get_transpose()
+        delta_weights.transpose()
+
+        self.weights -= delta_weights
+        self.biases -= d
+
+        next_error = self.weights * error
+
+        self.prev_layer.backpropagate(next_error, learning_rate)
