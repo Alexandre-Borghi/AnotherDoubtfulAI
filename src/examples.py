@@ -23,9 +23,6 @@ targets = [
 for _ in range(10000):
     i = randint(0, len(data) - 1)
     nn.train(data[i], targets[i], 0.1)
-    """print(
-        f"x = {data[i]} -> w = {nn.last_layer.weights.rows} + b = {nn.last_layer.biases.rows} -> y = {nn.last_layer.activations.rows} | t = {targets[i][0]}"
-    )"""
 
 
 print(nn.feedforward(data[0]).rows)
@@ -41,13 +38,9 @@ nn = NeuralNetwork([1, 1, 1])
 data = [[0], [1]]
 targets = [[1], [0]]
 
-
 for _ in range(0):
     i = randint(0, len(data) - 1)
     nn.train(data[i], targets[i], 0.1)
-    """print(
-        f"x = {data[i]} -> w = {nn.last_layer.weights.rows} + b = {nn.last_layer.biases.rows} -> y = {nn.last_layer.activations.rows} | t = {targets[i][0]}"
-    )"""
 
 print(nn.feedforward(data[0]).rows)
 print(nn.feedforward(data[1]).rows)

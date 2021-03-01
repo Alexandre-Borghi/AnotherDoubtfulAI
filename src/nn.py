@@ -15,6 +15,7 @@ class NeuralNetwork:
 
         self.first_layer = Layer(structure[0])
         self.last_layer = self.first_layer
+        self.loss = 0
 
         for i in range(1, len(structure)):
             self.last_layer = Layer(structure[i], self.last_layer)
@@ -42,4 +43,5 @@ class NeuralNetwork:
             loss += last_layer_error[i, 0] ** 2
 
         loss /= last_layer_error.m
-        print(f"\rLoss : {loss}", end="")
+        self.loss = loss
+
