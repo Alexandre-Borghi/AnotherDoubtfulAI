@@ -29,3 +29,12 @@ def leaky_relu(x):
 
 def leaky_relu_prime(x):
     return 0.01 if x < 0 else 1
+
+
+def from_rgb(r, g, b):
+    """Translates an rgb color of 0.0-1.0 floats to a tkinter friendly color code
+    """
+
+    r, g, b = int(r * 255), int(g * 255), int(b * 255)
+
+    return "#%02x%02x%02x" % (r, g, b)
