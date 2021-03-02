@@ -6,7 +6,9 @@ from nn import NeuralNetwork
 from nn_vis import NeuralNetVis
 from points import Points
 from settings_frame import SettingsFrame
+from loss_graph import LossGraphFrame
 from random import choice, shuffle
+from constants import *
 
 # Palette : https://flatuicolors.com/palette/defo
 
@@ -16,11 +18,13 @@ def reset():
     perceptron = NeuralNetwork([2, 1])
     nn_canvas.draw(perceptron)
     points.reset(perceptron)
+    loss.reset()
 
 
 root = tk.Tk()
 root.attributes('-zoomed', True)
 root.title("Binary Classifier Visualization")
+root.config(bg=BG_COLOR)
 
 
 perceptron = NeuralNetwork([2, 1])
@@ -40,6 +44,10 @@ points.draw()
 settings = SettingsFrame(root, reset)
 settings.place(relx=0, y=points_side, relwidth=1/3,
                height=root.winfo_height() - points_side)
+
+loss = LossGraphFrame(root)
+loss_side = root.winfo_height() / 2
+loss.place(relx=1/3, rely=0, width=loss_side, relheight=1/2)
 
 
 # Handling resize
@@ -66,13 +74,14 @@ def update():
     # for p in rnd:
     #    perceptron.train([p.relx, p.rely], [p.class_], 0.1)
 
-    print(settings.get_lr())
     for _ in range(1):
         p = choice(points.points)
         perceptron.train([p.relx, p.rely], [p.class_], settings.get_lr())
+        loss.add_loss(perceptron.loss)
 
     nn_canvas.draw(perceptron)
     points.draw()
+    loss.canvas.draw()
 
 
 root.bind('<Configure>', resize)

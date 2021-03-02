@@ -1,9 +1,11 @@
 import tkinter as tk
+from constants import *
 
 
 class SettingsFrame(tk.Frame):
     def __init__(self, parent, reset_command):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=BG_COLOR,
+                          highlightthickness=5, highlightbackground=FG_COLOR)
 
         self.lr_slider = tk.Scale(
             self, from_=0.001, to=0.1, resolution=0.001, orient=tk.HORIZONTAL)
