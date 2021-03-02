@@ -24,7 +24,6 @@ class NeuralNetVis(tk.Canvas):
 
         r = min(50, self.width / 4 - 20, self.height /
                 4 - 20)  # Neuron circle radius
-        print(f"{self.width}, {self.height}")
         neurons_font = ("Arial", int(-r/2))
 
         # Drawing circles neurons
@@ -47,8 +46,8 @@ class NeuralNetVis(tk.Canvas):
         i1_weight = nn.last_layer.weights[0, 0]
         i2_weight = nn.last_layer.weights[1, 0]
 
-        i1_b = abs(i1_weight)
-        i2_b = abs(i2_weight)
+        i1_b = min(abs(i1_weight), 1)
+        i2_b = min(abs(i2_weight), 1)
 
         i1_color = from_rgb(
             1, 1 - i1_b, 1 - i1_b) if i1_weight < 0 else from_rgb(1 - i1_b, 1 - i1_b, 1)
@@ -69,10 +68,10 @@ class NeuralNetVis(tk.Canvas):
         self.create_text(o.cx, o.cy, text="class",
                          fill=FG_COLOR, font=neurons_font)
 
-    @ property
+    @property
     def width(self):
         return self.winfo_width()
 
-    @ property
+    @property
     def height(self):
         return self.winfo_height()
