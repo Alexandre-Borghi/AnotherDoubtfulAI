@@ -22,7 +22,10 @@ def reset():
 
 
 root = tk.Tk()
-root.attributes('-zoomed', True)
+try:
+    root.attributes("-zoomed", True)
+except:
+    root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 root.title("Binary Classifier Visualization")
 root.config(bg=BG_COLOR)
 
